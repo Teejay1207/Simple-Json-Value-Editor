@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35828.75 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simple Json Value Editor", "Simple Json Value Editor.csproj", "{275F89AD-A09C-4908-A63A-1C602CF425EE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{275F89AD-A09C-4908-A63A-1C602CF425EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{275F89AD-A09C-4908-A63A-1C602CF425EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{275F89AD-A09C-4908-A63A-1C602CF425EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{275F89AD-A09C-4908-A63A-1C602CF425EE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8C86D5EC-9DFA-4EEB-9492-A6168E10CB0C}
+	EndGlobalSection
+EndGlobal
