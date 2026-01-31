@@ -39,18 +39,20 @@
 
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             menuStrip1 = new MenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
             openToolStripMenuItem = new ToolStripMenuItem();
             saveToolStripMenuItem = new ToolStripMenuItem();
             saveAsToolStripMenuItem = new ToolStripMenuItem();
+            byTeejayMerksToolStripMenuItem = new ToolStripMenuItem();
             splitContainer1 = new SplitContainer();
             treeViewJson = new TreeView();
-            chkValue = new CheckBox();
             btnApply = new Button();
-            txtValue = new TextBox();
             lblValue = new Label();
             lblPath = new Label();
+            txtValue = new TextBox();
+            chkValue = new CheckBox();
             openFileDialog1 = new OpenFileDialog();
             saveFileDialog1 = new SaveFileDialog();
             menuStrip1.SuspendLayout();
@@ -68,14 +70,14 @@
             menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(689, 24);
+            menuStrip1.Size = new Size(505, 24);
             menuStrip1.TabIndex = 0;
             menuStrip1.Text = "menuStrip1";
             // 
             // fileToolStripMenuItem
             // 
             fileToolStripMenuItem.BackColor = Color.FromArgb(32, 32, 32);
-            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { openToolStripMenuItem, saveToolStripMenuItem, saveAsToolStripMenuItem });
+            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { openToolStripMenuItem, saveToolStripMenuItem, saveAsToolStripMenuItem, byTeejayMerksToolStripMenuItem });
             fileToolStripMenuItem.ForeColor = Color.LightGray;
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             fileToolStripMenuItem.Size = new Size(37, 20);
@@ -86,7 +88,7 @@
             openToolStripMenuItem.BackColor = Color.FromArgb(45, 45, 48);
             openToolStripMenuItem.ForeColor = Color.WhiteSmoke;
             openToolStripMenuItem.Name = "openToolStripMenuItem";
-            openToolStripMenuItem.Size = new Size(123, 22);
+            openToolStripMenuItem.Size = new Size(180, 22);
             openToolStripMenuItem.Text = "&Open...";
             openToolStripMenuItem.Click += openToolStripMenuItem_Click;
             // 
@@ -95,7 +97,7 @@
             saveToolStripMenuItem.BackColor = Color.FromArgb(45, 45, 48);
             saveToolStripMenuItem.ForeColor = Color.WhiteSmoke;
             saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            saveToolStripMenuItem.Size = new Size(123, 22);
+            saveToolStripMenuItem.Size = new Size(180, 22);
             saveToolStripMenuItem.Text = "&Save";
             saveToolStripMenuItem.Click += saveToolStripMenuItem_Click;
             // 
@@ -104,9 +106,17 @@
             saveAsToolStripMenuItem.BackColor = Color.FromArgb(45, 45, 48);
             saveAsToolStripMenuItem.ForeColor = Color.WhiteSmoke;
             saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            saveAsToolStripMenuItem.Size = new Size(123, 22);
+            saveAsToolStripMenuItem.Size = new Size(180, 22);
             saveAsToolStripMenuItem.Text = "Save &As...";
             saveAsToolStripMenuItem.Click += saveAsToolStripMenuItem_Click;
+            // 
+            // byTeejayMerksToolStripMenuItem
+            // 
+            byTeejayMerksToolStripMenuItem.BackColor = Color.FromArgb(45, 45, 48);
+            byTeejayMerksToolStripMenuItem.ForeColor = Color.WhiteSmoke;
+            byTeejayMerksToolStripMenuItem.Name = "byTeejayMerksToolStripMenuItem";
+            byTeejayMerksToolStripMenuItem.Size = new Size(180, 22);
+            byTeejayMerksToolStripMenuItem.Text = "By: TeejayMerks";
             // 
             // splitContainer1
             // 
@@ -124,12 +134,12 @@
             // 
             splitContainer1.Panel2.BackColor = Color.FromArgb(37, 37, 38);
             splitContainer1.Panel2.Controls.Add(btnApply);
-            splitContainer1.Panel2.Controls.Add(txtValue);
             splitContainer1.Panel2.Controls.Add(lblValue);
             splitContainer1.Panel2.Controls.Add(lblPath);
+            splitContainer1.Panel2.Controls.Add(txtValue);
             splitContainer1.Panel2.Controls.Add(chkValue);
-            splitContainer1.Size = new Size(689, 380);
-            splitContainer1.SplitterDistance = 280;
+            splitContainer1.Size = new Size(505, 378);
+            splitContainer1.SplitterDistance = 221;
             splitContainer1.TabIndex = 1;
             // 
             // treeViewJson
@@ -141,23 +151,9 @@
             treeViewJson.LineColor = Color.FromArgb(60, 60, 60);
             treeViewJson.Location = new Point(0, 0);
             treeViewJson.Name = "treeViewJson";
-            treeViewJson.Size = new Size(280, 380);
+            treeViewJson.Size = new Size(221, 378);
             treeViewJson.TabIndex = 0;
             treeViewJson.AfterSelect += treeViewJson_AfterSelect;
-            // 
-            // chkValue
-            // 
-            chkValue.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            chkValue.BackColor = Color.FromArgb(25, 25, 25);
-            chkValue.Cursor = Cursors.Hand;
-            chkValue.FlatStyle = FlatStyle.System;
-            chkValue.ForeColor = Color.WhiteSmoke;
-            chkValue.Location = new Point(10, 53);
-            chkValue.Name = "chkValue";
-            chkValue.Size = new Size(383, 30);
-            chkValue.TabIndex = 2;
-            chkValue.UseVisualStyleBackColor = false;
-            chkValue.Visible = false;
             // 
             // btnApply
             // 
@@ -168,26 +164,13 @@
             btnApply.FlatAppearance.MouseOverBackColor = Color.FromArgb(55, 55, 55);
             btnApply.FlatStyle = FlatStyle.Flat;
             btnApply.ForeColor = Color.WhiteSmoke;
-            btnApply.Location = new Point(299, 341);
+            btnApply.Location = new Point(174, 339);
             btnApply.Name = "btnApply";
             btnApply.Size = new Size(94, 27);
             btnApply.TabIndex = 3;
             btnApply.Text = "Apply";
             btnApply.UseVisualStyleBackColor = false;
             btnApply.Click += btnApply_Click;
-            // 
-            // txtValue
-            // 
-            txtValue.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            txtValue.BackColor = Color.FromArgb(25, 25, 25);
-            txtValue.Cursor = Cursors.IBeam;
-            txtValue.ForeColor = Color.WhiteSmoke;
-            txtValue.Location = new Point(12, 53);
-            txtValue.Multiline = true;
-            txtValue.Name = "txtValue";
-            txtValue.ScrollBars = ScrollBars.Vertical;
-            txtValue.Size = new Size(383, 30);
-            txtValue.TabIndex = 3;
             // 
             // lblValue
             // 
@@ -206,9 +189,35 @@
             lblPath.ForeColor = Color.LightGray;
             lblPath.Location = new Point(12, 9);
             lblPath.Name = "lblPath";
-            lblPath.Size = new Size(383, 23);
+            lblPath.Size = new Size(258, 23);
             lblPath.TabIndex = 0;
             lblPath.Text = "Select a value node on the left.";
+            // 
+            // txtValue
+            // 
+            txtValue.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            txtValue.BackColor = Color.FromArgb(25, 25, 25);
+            txtValue.Cursor = Cursors.IBeam;
+            txtValue.ForeColor = Color.WhiteSmoke;
+            txtValue.Location = new Point(10, 53);
+            txtValue.Multiline = true;
+            txtValue.Name = "txtValue";
+            txtValue.Size = new Size(260, 28);
+            txtValue.TabIndex = 3;
+            txtValue.WordWrap = false;
+            // 
+            // chkValue
+            // 
+            chkValue.BackColor = Color.FromArgb(25, 25, 25);
+            chkValue.Cursor = Cursors.Hand;
+            chkValue.FlatStyle = FlatStyle.System;
+            chkValue.ForeColor = Color.WhiteSmoke;
+            chkValue.Location = new Point(10, 53);
+            chkValue.Name = "chkValue";
+            chkValue.Size = new Size(260, 28);
+            chkValue.TabIndex = 2;
+            chkValue.UseVisualStyleBackColor = false;
+            chkValue.Visible = false;
             // 
             // openFileDialog1
             // 
@@ -225,10 +234,11 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(37, 37, 38);
-            ClientSize = new Size(689, 404);
+            ClientSize = new Size(505, 402);
             Controls.Add(splitContainer1);
             Controls.Add(menuStrip1);
             ForeColor = Color.LightGray;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = menuStrip1;
             Name = "Form1";
             Text = "Simple Json Value Editor";
@@ -245,5 +255,7 @@
         }
 
         #endregion
+
+        private ToolStripMenuItem byTeejayMerksToolStripMenuItem;
     }
 }
