@@ -20,6 +20,8 @@
         private System.Windows.Forms.Button btnApply;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+        private System.Windows.Forms.CheckBox chkValue;
+
 
         /// <summary>
         /// Clean up any resources being used.
@@ -44,6 +46,7 @@
             saveAsToolStripMenuItem = new ToolStripMenuItem();
             splitContainer1 = new SplitContainer();
             treeViewJson = new TreeView();
+            chkValue = new CheckBox();
             btnApply = new Button();
             txtValue = new TextBox();
             lblValue = new Label();
@@ -124,7 +127,8 @@
             splitContainer1.Panel2.Controls.Add(txtValue);
             splitContainer1.Panel2.Controls.Add(lblValue);
             splitContainer1.Panel2.Controls.Add(lblPath);
-            splitContainer1.Size = new Size(689, 373);
+            splitContainer1.Panel2.Controls.Add(chkValue);
+            splitContainer1.Size = new Size(689, 380);
             splitContainer1.SplitterDistance = 280;
             splitContainer1.TabIndex = 1;
             // 
@@ -137,9 +141,23 @@
             treeViewJson.LineColor = Color.FromArgb(60, 60, 60);
             treeViewJson.Location = new Point(0, 0);
             treeViewJson.Name = "treeViewJson";
-            treeViewJson.Size = new Size(280, 373);
+            treeViewJson.Size = new Size(280, 380);
             treeViewJson.TabIndex = 0;
             treeViewJson.AfterSelect += treeViewJson_AfterSelect;
+            // 
+            // chkValue
+            // 
+            chkValue.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            chkValue.BackColor = Color.FromArgb(25, 25, 25);
+            chkValue.Cursor = Cursors.Hand;
+            chkValue.FlatStyle = FlatStyle.System;
+            chkValue.ForeColor = Color.WhiteSmoke;
+            chkValue.Location = new Point(10, 53);
+            chkValue.Name = "chkValue";
+            chkValue.Size = new Size(383, 30);
+            chkValue.TabIndex = 2;
+            chkValue.UseVisualStyleBackColor = false;
+            chkValue.Visible = false;
             // 
             // btnApply
             // 
@@ -150,7 +168,7 @@
             btnApply.FlatAppearance.MouseOverBackColor = Color.FromArgb(55, 55, 55);
             btnApply.FlatStyle = FlatStyle.Flat;
             btnApply.ForeColor = Color.WhiteSmoke;
-            btnApply.Location = new Point(299, 334);
+            btnApply.Location = new Point(299, 341);
             btnApply.Name = "btnApply";
             btnApply.Size = new Size(94, 27);
             btnApply.TabIndex = 3;
@@ -162,14 +180,14 @@
             // 
             txtValue.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             txtValue.BackColor = Color.FromArgb(25, 25, 25);
-            txtValue.BorderStyle = BorderStyle.FixedSingle;
+            txtValue.Cursor = Cursors.IBeam;
             txtValue.ForeColor = Color.WhiteSmoke;
             txtValue.Location = new Point(12, 53);
             txtValue.Multiline = true;
             txtValue.Name = "txtValue";
             txtValue.ScrollBars = ScrollBars.Vertical;
-            txtValue.Size = new Size(383, 249);
-            txtValue.TabIndex = 2;
+            txtValue.Size = new Size(383, 30);
+            txtValue.TabIndex = 3;
             // 
             // lblValue
             // 
@@ -207,7 +225,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(37, 37, 38);
-            ClientSize = new Size(689, 397);
+            ClientSize = new Size(689, 404);
             Controls.Add(splitContainer1);
             Controls.Add(menuStrip1);
             ForeColor = Color.LightGray;

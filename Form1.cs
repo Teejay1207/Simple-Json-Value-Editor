@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
@@ -115,6 +116,8 @@ namespace Simple_Json_Value_Editor
             treeViewJson.EndUpdate();
             lblPath.Text = "Select a value node on the left.";
             txtValue.Clear();
+            txtValue.Visible = true;
+            chkValue.Visible = false;
         }
 
         private void BuildChildren(TreeNode treeNode, JsonNode jsonNode)
@@ -151,32 +154,6 @@ namespace Simple_Json_Value_Editor
             }
         }
 
-        // When user selects a node in the TreeView
-        private void treeViewJson_AfterSelect(object sender, TreeViewEventArgs e)
-        {
-            if (e.Node?.Tag is not JsonNodeTag tag || tag.Node == null)
-            {
-                lblPath.Text = "No node selected.";
-                txtValue.Clear();
-                return;
-            }
-
-            lblPath.Text = GetJsonPath(e.Node);
-
-            if (IsValueNode(tag.Node))
-            {
-                txtValue.Enabled = true;
-                btnApply.Enabled = true;
-                txtValue.Text = tag.Node.ToJsonString(new JsonSerializerOptions { WriteIndented = false });
-            }
-            else
-            {
-                txtValue.Enabled = false;
-                btnApply.Enabled = false;
-                txtValue.Clear();
-            }
-        }
-
         private static bool IsValueNode(JsonNode node)
         {
             return node is JsonValue;
@@ -184,70 +161,153 @@ namespace Simple_Json_Value_Editor
 
         private string GetJsonPath(TreeNode node)
         {
-            // Build something like: Container.Containers[0].Item.ItemId
             var parts = node
                 .FullPath
                 .Split(new[] { treeViewJson.PathSeparator }, StringSplitOptions.None);
 
-            return string.Join(".", parts.Skip(1)); // skip (root)
+            return string.Join(".", parts.Skip(1));
         }
 
-        // Apply button: update the JSON node from txtValue
+        // FIXED: Safe pattern matching for tag
+        private void treeViewJson_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            var tempTag = e.Node?.Tag as JsonNodeTag;
+            if (tempTag == null || tempTag.Node == null)
+            {
+                lblPath.Text = "No node selected.";
+                txtValue.Clear();
+                txtValue.Visible = true;
+                chkValue.Visible = false;
+                txtValue.Enabled = false;
+                chkValue.Enabled = false;
+                btnApply.Enabled = false;
+                return;
+            }
+            var tag = tempTag;
+
+            lblPath.Text = GetJsonPath(e.Node);
+            txtValue.Visible = true;
+            chkValue.Visible = false;
+
+            if (IsValueNode(tag.Node))
+            {
+                txtValue.Enabled = true;
+                chkValue.Enabled = false;
+                btnApply.Enabled = true;
+
+                if (tag.Node is JsonValue jv)
+                {
+                    var underlying = jv.GetValueKind();
+                    if (underlying == JsonValueKind.True || underlying == JsonValueKind.False)
+                    {
+                        txtValue.Visible = false;
+                        chkValue.Visible = true;
+                        chkValue.Enabled = true;
+                        chkValue.Checked = underlying == JsonValueKind.True;
+                        return;
+                    }
+                }
+
+                txtValue.Text = tag.Node.ToJsonString(new JsonSerializerOptions { WriteIndented = false });
+            }
+            else
+            {
+                txtValue.Enabled = false;
+                chkValue.Enabled = false;
+                btnApply.Enabled = false;
+                txtValue.Clear();
+            }
+        }
+
+        // FIXED: Safe pattern matching + type validation + _rootNode
         private void btnApply_Click(object sender, EventArgs e)
         {
             var selected = treeViewJson.SelectedNode;
-            if (selected?.Tag is not JsonNodeTag tag || tag.Node == null)
-                return;
+            var tempTag = selected?.Tag as JsonNodeTag;
+            if (tempTag == null || tempTag.Node == null) return;
+            var tag = tempTag;
 
-            if (!IsValueNode(tag.Node))
-                return;
+            if (!IsValueNode(tag.Node)) return;
 
             try
             {
-                var raw = txtValue.Text.Trim();
-
                 JsonNode newValueNode;
 
-                bool looksLikeJsonLiteral =
-                    raw.Equals("null", StringComparison.OrdinalIgnoreCase) ||
-                    raw.Equals("true", StringComparison.OrdinalIgnoreCase) ||
-                    raw.Equals("false", StringComparison.OrdinalIgnoreCase) ||
-                    raw.StartsWith("\"") ||
-                    raw.StartsWith("{") ||
-                    raw.StartsWith("[") ||
-                    double.TryParse(raw, out _);
-
-                if (!looksLikeJsonLiteral)
+                if (tag.Node is JsonValue jv && (jv.GetValueKind() == JsonValueKind.True || jv.GetValueKind() == JsonValueKind.False))
                 {
-                    // Treat as string
-                    raw = JsonSerializer.Serialize(raw);
+                    newValueNode = JsonValue.Create((bool)chkValue.Checked);
+                }
+                else
+                {
+                    var raw = txtValue.Text.Trim();
+                    if (string.IsNullOrEmpty(raw)) throw new Exception("Value cannot be empty.");
+
+                    var jvTemp = tag.Node as JsonValue ?? throw new Exception("Only primitive values supported.");
+                    var valueKind = jvTemp.GetValueKind();
+
+                    if (valueKind == JsonValueKind.Number)
+                    {
+                        if (!double.TryParse(raw, NumberStyles.Float, CultureInfo.InvariantCulture, out double num))
+                            throw new Exception("Invalid number: use decimal format like 123.45 (no letters).");
+                        newValueNode = JsonValue.Create(num);
+                    }
+                    else if (valueKind == JsonValueKind.String)
+                    {
+                        newValueNode = JsonValue.Create(raw);
+                    }
+                    else if (valueKind == JsonValueKind.Null)
+                    {
+                        if (!raw.Equals("null", StringComparison.OrdinalIgnoreCase))
+                            throw new Exception("Null values must be exactly 'null'.");
+                        newValueNode = JsonValue.Create((object?)null);
+                    }
+                    else
+                    {
+                        newValueNode = JsonNode.Parse(raw) ?? JsonValue.Create(raw);
+                    }
                 }
 
-                newValueNode = JsonNode.Parse(raw);
-
-                // Replace in parent
+                // Replace using correct field name
                 if (tag.Parent is JsonObject parentObj && tag.PropertyName != null)
                 {
                     parentObj[tag.PropertyName] = newValueNode;
-                    tag.Node = newValueNode;
                 }
                 else if (tag.Parent is JsonArray parentArray && tag.Index.HasValue)
                 {
                     parentArray[tag.Index.Value] = newValueNode;
-                    tag.Node = newValueNode;
                 }
                 else if (_rootNode == tag.Node)
                 {
                     _rootNode = newValueNode;
                 }
 
+                tag.Node = newValueNode;
                 selected.Tag = tag;
+                RefreshNodeDisplay(selected);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, $"Failed to apply value:\n{ex.Message}", "Error",
+                MessageBox.Show(this, $"Failed to apply value: {ex.Message}", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        // FIXED: Safe refresh with proper Begin/EndUpdate pairing
+        private void RefreshNodeDisplay(TreeNode? node)
+        {
+            if (node == null || node.Tag is not JsonNodeTag refreshTag) return;
+
+            treeViewJson.BeginUpdate();
+            node.Nodes.Clear();
+
+            if (IsValueNode(refreshTag.Node))
+            {
+                treeViewJson.EndUpdate();
+                return;
+            }
+
+            BuildChildren(node, refreshTag.Node);
+            treeViewJson.EndUpdate();
         }
 
         private sealed class JsonNodeTag
